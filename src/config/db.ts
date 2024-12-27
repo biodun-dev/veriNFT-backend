@@ -1,16 +1,18 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-dotenv.config(); 
+import logger from '../utils/logger'; 
+
+dotenv.config();
 
 const connectDB = async (): Promise<void> => {
   try {
     const conn = await mongoose.connect(process.env.DB_URI || '');
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    logger.info(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     if (error instanceof Error) {
-      console.error(`Error: ${error.message}`);
+      logger.error(`MongoDB Connection Error: ${error.message}`);
     } else {
-      console.error('Unexpected error occurred:', error);
+      logger.error('Unexpected error occurred during MongoDB connection');
     }
     process.exit(1);
   }
