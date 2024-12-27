@@ -1,13 +1,15 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthenticatedRequest } from '../types/AuthenticatedRequest';
 import Bookmark from '../models/bookmarkModel';
 
-export const addBookmark = async (req: Request, res: Response) => {
+export const addBookmark = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { contractAddress, tokenId } = req.body;
     const userId = req.user?.id;
 
     if (!userId) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      res.status(401).json({ error: 'Unauthorized access' });
+      return;
     }
 
     const bookmark = new Bookmark({ userId, contractAddress, tokenId });
@@ -20,12 +22,13 @@ export const addBookmark = async (req: Request, res: Response) => {
   }
 };
 
-export const getBookmarks = async (req: Request, res: Response) => {
+export const getBookmarks = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user?.id;
 
     if (!userId) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      res.status(401).json({ error: 'Unauthorized access' });
+      return;
     }
 
     const bookmarks = await Bookmark.find({ userId });
