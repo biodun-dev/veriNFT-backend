@@ -1,61 +1,62 @@
-VeriNFT Backend
+# VeriNFT Backend
 
 VeriNFT Backend is the core infrastructure for verifying the authenticity of NFTs, fetching their metadata, and supporting batch processing of multiple NFTs using the bitsCrunch API. This backend is designed to be secure, scalable, and easy to integrate with frontend applications.
 
-Features
+## Features
 
-NFT Verification: Verify the authenticity of NFTs using bitsCrunch’s IP Protection APIs.
+- **NFT Verification**: Verify the authenticity of NFTs using bitsCrunch’s IP Protection APIs.
+- **Metadata Fetching**: Retrieve metadata for NFTs, including title, creator, and mint date.
+- **Batch Processing**: Process multiple NFTs using a CSV file.
+- **User Management**: Handle user authentication with JWT-based login and signup.
+- **Error Handling**: Descriptive error messages for better debugging.
 
-Metadata Fetching: Retrieve metadata for NFTs, including title, creator, and mint date.
-
-Batch Processing: Process multiple NFTs using a CSV file.
-
-User Management: Handle user authentication with JWT-based login and signup.
-
-Error Handling: Descriptive error messages for better debugging.
-
-Prerequisites
+## Prerequisites
 
 Ensure you have the following installed:
 
-Node.js (v14 or later)
+- **Node.js** (v14 or later)
+- **npm** (v6 or later)
+- **MongoDB Atlas** (or a local MongoDB instance)
 
-npm (v6 or later)
+## Installation
 
-MongoDB Atlas (or a local MongoDB instance)
+1. Clone the repository:
 
-Installation
+   ```bash
+   git clone https://github.com/your-repo/veriNFT-backend.git
+   cd veriNFT-backend
+   ```
 
-Clone the repository:
+2. Install dependencies:
 
-git clone https://github.com/your-repo/veriNFT-backend.git
-cd veriNFT-backend
+   ```bash
+   npm install
+   ```
 
-Install dependencies:
+3. Set up environment variables:
 
-npm install
+   - Create a `.env` file in the root directory and add the following:
+     ```plaintext
+     PORT=5000
+     DB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/veriNFT?retryWrites=true&w=majority
+     BITSCRUNCH_API_KEY=your_bitsCrunch_api_key
+     JWT_SECRET=your_jwt_secret
+     ```
 
-Set up environment variables:
+## Scripts
 
-Create a .env file in the root directory and add the following:
+- **Start in Production**:
+  ```bash
+  npm start
+  ```
+- **Start in Development**:
+  ```bash
+  npm run dev
+  ```
 
-PORT=5000
-DB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/veriNFT?retryWrites=true&w=majority
-BITSCRUNCH_API_KEY=your_bitsCrunch_api_key
-JWT_SECRET=your_jwt_secret
+## Folder Structure
 
-Scripts
-
-Start in Production:
-
-npm start
-
-Start in Development:
-
-npm run dev
-
-Folder Structure
-
+```plaintext
 veriNFT-backend/
 ├── src/
 │   ├── controllers/       # Logic for handling API requests
@@ -69,135 +70,138 @@ veriNFT-backend/
 ├── package.json           # Project configuration
 ├── tsconfig.json          # TypeScript configuration
 ├── README.md              # Project documentation
+```
 
-API Endpoints
+## API Endpoints
 
-Authentication
+### Authentication
 
-Register: POST /api/auth/signup
+- **Register**: `POST /api/auth/signup`
 
-Body:
-
-{
-  "email": "user@example.com",
-  "password": "securepassword"
-}
-
-Response:
-
-{
-  "message": "User registered successfully."
-}
-
-Login: POST /api/auth/login
-
-Body:
-
-{
-  "email": "user@example.com",
-  "password": "securepassword"
-}
-
-Response:
-
-{
-  "token": "jwt_token"
-}
-
-NFT Verification
-
-Verify NFT: POST /api/nft/verify
-
-Body:
-
-{
-  "contractAddress": "0x1234567890abcdef1234567890abcdef12345678",
-  "tokenId": "1"
-}
-
-Response:
-
-{
-  "authenticity": "Valid",
-  "confidenceScore": 0.87,
-  "relatedDuplicates": ["0xabc123", "0xdef456"]
-}
-
-Fetch Metadata: POST /api/nft/metadata
-
-Body:
-
-{
-  "contractAddress": "0x1234567890abcdef1234567890abcdef12345678",
-  "tokenId": "1"
-}
-
-Response:
-
-{
-  "title": "Digital Art #1",
-  "creator": "Artist Name",
-  "collectionName": "Artworks",
-  "owner": "0x789123",
-  "mintDate": "2024-01-15"
-}
-
-Batch Verify NFTs: POST /api/nft/batch-verify
-
-Body: CSV file containing contractAddress and tokenId columns.
-
-Response:
-
-{
-  "results": [
+  - Body:
+    ```json
     {
-      "contractAddress": "0x123...",
-      "tokenId": "1",
-      "authenticity": "Valid",
-      "confidenceScore": 0.87
+      "email": "user@example.com",
+      "password": "securepassword"
     }
-  ]
-}
+    ```
+  - Response:
+    ```json
+    {
+      "message": "User registered successfully."
+    }
+    ```
 
-Development
+- **Login**: `POST /api/auth/login`
 
-Run the server in development mode:
+  - Body:
+    ```json
+    {
+      "email": "user@example.com",
+      "password": "securepassword"
+    }
+    ```
+  - Response:
+    ```json
+    {
+      "token": "jwt_token"
+    }
+    ```
 
-npm run dev
+### NFT Verification
 
-Access the server:
+- **Verify NFT**: `POST /api/nft/verify`
 
-Local: http://localhost:5000
+  - Body:
+    ```json
+    {
+      "contractAddress": "0x1234567890abcdef1234567890abcdef12345678",
+      "tokenId": "1"
+    }
+    ```
+  - Response:
+    ```json
+    {
+      "authenticity": "Valid",
+      "confidenceScore": 0.87,
+      "relatedDuplicates": ["0xabc123", "0xdef456"]
+    }
+    ```
 
-Test endpoints using tools like Postman or Curl.
+- **Fetch Metadata**: `POST /api/nft/metadata`
 
-Contributing
+  - Body:
+    ```json
+    {
+      "contractAddress": "0x1234567890abcdef1234567890abcdef12345678",
+      "tokenId": "1"
+    }
+    ```
+  - Response:
+    ```json
+    {
+      "title": "Digital Art #1",
+      "creator": "Artist Name",
+      "collectionName": "Artworks",
+      "owner": "0x789123",
+      "mintDate": "2024-01-15"
+    }
+    ```
 
-Fork the repository.
+- **Batch Verify NFTs**: `POST /api/nft/batch-verify`
 
-Create a feature branch:
+  - Body: CSV file containing `contractAddress` and `tokenId` columns.
+  - Response:
+    ```json
+    {
+      "results": [
+        {
+          "contractAddress": "0x123...",
+          "tokenId": "1",
+          "authenticity": "Valid",
+          "confidenceScore": 0.87
+        }
+      ]
+    }
+    ```
 
-git checkout -b feature-name
+## Development
 
-Commit your changes:
+1. Run the server in development mode:
 
-git commit -m "Description of changes"
+   ```bash
+   npm run dev
+   ```
 
-Push to your branch:
+2. Access the server:
 
-git push origin feature-name
+   - Local: `http://localhost:5000`
 
-Create a pull request.
+3. Test endpoints using tools like Postman or Curl.
 
-License
+## Contributing
 
-This project is licensed under the MIT License.
+1. Fork the repository.
+2. Create a feature branch:
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Description of changes"
+   ```
+4. Push to your branch:
+   ```bash
+   git push origin feature-name
+   ```
+5. Create a pull request.
 
-Acknowledgments
+## License
 
-bitsCrunch for their API services.
+This project is licensed under the [MIT License](LICENSE).
 
-MongoDB Atlas for database hosting.
+## Acknowledgments
 
-Community contributions for improving the project.
-
+- **bitsCrunch** for their API services.
+- **MongoDB Atlas** for database hosting.
+- Community contributions for improving the project.
